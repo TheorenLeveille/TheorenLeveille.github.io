@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Original Doom</title>
+
+    <link rel='stylesheet' type='text/css' href='css/style.css'>
+    
+</head>
+<body id='bg'>
+
+<embed src='src/doom_music.mp3' width='0' height="0" autostart="true" loop="true">
+<img id='imp' src='images/imp.gif'>
+<img id='demon' src='images/enemy2.png'>
+
+<div id='bar'>
+    <div id='ammo'>20</div>
+    <div id='value'>0</div>
+    <div id='score'>SCORE</div>
+</div>
+
+<button id='reset'>END GAME</button>
+
+<script>
+
+    let bullets = 20;
+    let kills = 0;
+    
+    function impDeathAnimation(){
+        document.getElementById('imp').width = 200;
+        document.getElementById('imp').src = 'images/impDeath.gif';
+        setTimeout(replaceImpImage, 1500);
+        deathAudio();  
+        increaseKills();
+    }
+
+    function demonDeathAnimation(){
+        document.getElementById('demon').src = 'images/enemy2.gif';
+        setTimeout(replaceDemonImage, 1500);
+        demonDeathAudio();
+        increaseKills();
+    }
+
+    function replaceImpImage(){
+        document.getElementById('imp').src = 'images/imp.gif';
+    }
+
+    function replaceDemonImage(){
+        document.getElementById('demon').src = 'images/enemy2.png';
+    }
+
+    function deathAudio(){
+        let sound = new Audio('src/impDeathSound.mp3');
+        sound.play();
+    }
+
+    function demonDeathAudio(){
+        let sound = new Audio('src/cacodemonDeath.wav');
+        sound.play();
+    }
+
+    function gunShot(){
+        let gunSound = new Audio('src/dspistol.wav');
+        if (bullets > 0){ 
+            gunSound.play();
+            decreaseAmmo();
+        }
+        else{
+            noAmmo();
+        }
+    }
+
+    function decreaseAmmo(){
+        document.getElementById('ammo').innerHTML = bullets - 1;
+        bullets--;
+    }
+
+    function noAmmo(){
+        let emptyGunSound = new Audio('src/noAmmo.mp3');
+        emptyGunSound.play();
+    }
+
+    function increaseKills(){
+        document.getElementById('value').innerHTML = kills + 1;
+        kills++;
+    }
+
+    function moveImp(){
+        let w = window.innerWidth - 200; 
+        let h = window.innerHeight - 200;
+        document.getElementById('imp').style.left = Math.floor(Math.random() * w);
+        document.getElementById('imp').style.top = Math.floor(Math.random() * h);
+    }
+
+    function moveDemon(){
+        let w = window.innerWidth - 300; 
+        let h = window.innerHeight - 300;
+        document.getElementById('demon').style.left = Math.floor(Math.random() * w);
+        document.getElementById('demon').style.top = Math.floor(Math.random() * h);
+    }
+
+    function resetGame(){
+        resetSound();
+        resetStats();
+        resetPosition();
+    }
+
+    function resetSound(){
+        let sound = new Audio('src/resetSound.wav');
+        sound.play();
+    }
+
+    function resetStats(){
+        bullets = 21;
+        kills = 0;
+        document.getElementById('ammo').innerHTML = bullets;
+        document.getElementById('value').innerHTML = kills;
+    }
+
+    function resetPosition(){
+        document.getElementById('imp').style.left = 0;
+        document.getElementById('imp').style.top = 0;
+        document.getElementById('demon').style.left = 1500;
+        document.getElementById('demon').style.top = 0;
+    }
+
+    function main(){
+        setInterval(moveImp, 2000);
+        setInterval(moveDemon, 2000);
+
+        document.getElementById('imp').onclick = impDeathAnimation;
+        document.getElementById('demon').onclick = demonDeathAnimation;
+        document.getElementById('bg').onclick = gunShot;
+        document.getElementById('reset').onclick = resetGame;  
+    }
+
+    main();
+</script>
+</body>
+</html>
