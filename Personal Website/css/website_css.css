@@ -20,7 +20,8 @@
         div {
             border:black;
             padding: 10px; 
-            margin-bottom:10px; 
+            margin-bottom:10px;
+            overflow: hidden; 
         }
         div:hover {
             box-shadow: 5px 5px 5px 5px white; 
